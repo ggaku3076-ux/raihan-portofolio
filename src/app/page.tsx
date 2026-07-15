@@ -107,49 +107,57 @@ export default function Home() {
       </header>
 
       {/* ── HERO ── */}
-      <section className="min-h-screen flex flex-col justify-end pb-20 px-6 md:px-12 max-w-6xl mx-auto pt-32 relative overflow-hidden">
-
-        {/* bg image desktop */}
+      <section className="relative min-h-screen overflow-hidden">
+        {/* bg — full bleed, tidak dibatasi max-width */}
         <div className="absolute inset-0 z-0 pointer-events-none">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/assets/bg-hero.png" alt=""
-            className="hidden md:block absolute right-0 top-0 h-full w-auto object-cover object-right opacity-60"
+          <img
+            src="/assets/bg-hero.png"
+            alt=""
+            className="hidden md:block absolute right-0 top-0 h-full w-auto max-w-none object-right object-cover"
+            style={{ opacity: 1 }}
           />
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/assets/bg-mobile.png" alt=""
-            className="block md:hidden absolute right-0 top-0 h-full w-full object-cover object-center opacity-40"
+          <img
+            src="/assets/bg-mobile.png"
+            alt=""
+            className="block md:hidden absolute right-0 top-0 h-full w-full object-cover object-center"
+            style={{ opacity: 0.5 }}
           />
         </div>
 
-        <motion.div initial="hidden" animate="visible" variants={stagger} className="space-y-6 relative z-10">
-          <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#aaa]">
-            available for projects — 2026
-          </motion.p>
-          <motion.h1 variants={fadeUp}
-            className="text-[clamp(3rem,9vw,8rem)] leading-[0.92] tracking-[-0.02em] text-[#0a0a0a]"
-            style={{ fontWeight: 300 }}>
-            Raihan<br />
-            <span className="text-[#c8c8c0]">Fajar</span><br />
-            Aly
-          </motion.h1>
-          <motion.div variants={fadeUp} className="flex flex-col md:flex-row md:items-end justify-between gap-8 pt-8 border-t border-[#e5e5e0]">
-            <p className="text-[#888] text-sm md:text-base max-w-md leading-relaxed">
-              web developer & ui/ux designer based in indonesia. building clean, purposeful digital experiences that work.
-            </p>
-            <div className="flex gap-6">
-              <a href="https://github.com/ggaku3076-ux" target="_blank" rel="noreferrer" className="text-[#bbb] hover:text-[#0a0a0a] transition-colors"><GithubIcon /></a>
-              <a href="https://instagram.com/raihnnf.a" target="_blank" rel="noreferrer" className="text-[#bbb] hover:text-[#0a0a0a] transition-colors"><InstagramIcon /></a>
-              <a href="https://tiktok.com/@raihnnfa" target="_blank" rel="noreferrer" className="text-[#bbb] hover:text-[#0a0a0a] transition-colors"><TiktokIcon /></a>
-              <a href="mailto:rehanalay9@gmail.com" className="text-[#bbb] hover:text-[#0a0a0a] transition-colors"><MailIcon /></a>
-            </div>
+        {/* content — max-width di sini */}
+        <div className="relative z-10 min-h-screen flex flex-col justify-end pb-20 px-6 md:px-12 max-w-6xl mx-auto pt-32">
+          <motion.div initial="hidden" animate="visible" variants={stagger} className="space-y-6">
+            <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#aaa]">
+              available for projects — 2026
+            </motion.p>
+            <motion.h1 variants={fadeUp}
+              className="text-[clamp(3rem,9vw,8rem)] leading-[0.92] tracking-[-0.02em] text-[#0a0a0a]"
+              style={{ fontWeight: 300 }}>
+              Raihan<br />
+              <span className="text-[#c8c8c0]">Fajar</span><br />
+              Aly
+            </motion.h1>
+            <motion.div variants={fadeUp} className="flex flex-col md:flex-row md:items-end justify-between gap-8 pt-8 border-t border-[#e5e5e0]">
+              <p className="text-[#888] text-sm md:text-base max-w-md leading-relaxed">
+                web developer & ui/ux designer based in indonesia. building clean, purposeful digital experiences that work.
+              </p>
+              <div className="flex gap-6">
+                <a href="https://github.com/ggaku3076-ux" target="_blank" rel="noreferrer" className="text-[#bbb] hover:text-[#0a0a0a] transition-colors"><GithubIcon /></a>
+                <a href="https://instagram.com/raihnnf.a" target="_blank" rel="noreferrer" className="text-[#bbb] hover:text-[#0a0a0a] transition-colors"><InstagramIcon /></a>
+                <a href="https://tiktok.com/@raihnnfa" target="_blank" rel="noreferrer" className="text-[#bbb] hover:text-[#0a0a0a] transition-colors"><TiktokIcon /></a>
+                <a href="mailto:rehanalay9@gmail.com" className="text-[#bbb] hover:text-[#0a0a0a] transition-colors"><MailIcon /></a>
+              </div>
+            </motion.div>
           </motion.div>
-        </motion.div>
 
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.6 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center">
-          <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            className="w-[1px] h-8 bg-[#ccc]" />
-        </motion.div>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.6 }}
+            className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center">
+            <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              className="w-[1px] h-8 bg-[#ccc]" />
+          </motion.div>
+        </div>
       </section>
 
       {/* ── ABOUT — dark ── */}
