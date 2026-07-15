@@ -285,13 +285,15 @@ export default function Home() {
                   {filteredWeb.map((project) => (
                     <motion.div key={project.id} variants={cardFade}
                       className="bg-[#faf9f5] flex flex-col group hover:bg-white transition-colors duration-300">
-                      {/* thumbnail */}
-                      <div className="aspect-[16/9] overflow-hidden bg-[#f0f0ea]">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={project.image} alt={project.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
-                          loading="lazy" />
-                      </div>
+                      {/* thumbnail — klik buka live site */}
+                      <a href={project.live} target="_blank" rel="noreferrer" className="block overflow-hidden bg-[#f0f0ea]">
+                        <div className="aspect-[16/9] overflow-hidden">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={project.image} alt={project.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
+                            loading="lazy" />
+                        </div>
+                      </a>
                       {/* info */}
                       <div className="p-6 flex flex-col flex-grow justify-between">
                         <div>
@@ -326,16 +328,16 @@ export default function Home() {
                 </motion.div>
               ) : (
                 <motion.div key={`desain-${designFilter}`} variants={stagger} initial="hidden" animate="visible" exit={{ opacity: 0 }}
-                  className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-px bg-[#e5e5e0]">
+                  className="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6">
                   {filteredDesign.map((d) => (
-                    <motion.div key={d.id} variants={cardFade} className="bg-[#faf9f5] group overflow-hidden">
-                      <div className={`overflow-hidden ${d.category === "instagram" ? "aspect-square" : "aspect-[4/3]"}`}>
+                    <motion.div key={d.id} variants={cardFade} className="bg-[#faf9f5] border border-[#e5e5e0] group overflow-hidden break-inside-avoid">
+                      <a href={d.image} target="_blank" rel="noreferrer" className="block overflow-hidden">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={d.image} alt={d.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          className="w-full h-auto object-contain group-hover:scale-[1.02] transition-transform duration-500"
                           loading="lazy" />
-                      </div>
-                      <div className="px-5 py-4 border-t border-[#e5e5e0] flex justify-between items-center">
+                      </a>
+                      <div className="px-5 py-4 border-t border-[#e5e5e0] flex justify-between items-center bg-[#faf9f5]">
                         <span className="text-xs text-[#555]" style={{ fontWeight: 400 }}>{d.title}</span>
                         <span className="text-[9px] font-mono text-[#bbb]">{d.tags[0]}</span>
                       </div>
