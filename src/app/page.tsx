@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import { webProjects, designProjects, ProjectType } from "../data/projects";
 
@@ -33,31 +33,33 @@ const TiktokIcon = () => (
   </svg>
 );
 
+// animasi ringan — stagger kecil, durasi pendek
 const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
 const stagger: Variants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.07, delayChildren: 0.1 } },
+  visible: { opacity: 1, transition: { staggerChildren: 0.06, delayChildren: 0.05 } },
 };
 const cardFade: Variants = {
-  hidden: { opacity: 0, y: 12 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
+  hidden: { opacity: 0, y: 8 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: "easeOut" } },
+};
+// versi tanpa animasi untuk reduced-motion / mobile
+const noAnim: Variants = {
+  hidden: { opacity: 1, y: 0 },
+  visible: { opacity: 1, y: 0 },
 };
 
 type WebFilter = "all" | "travel" | "cafe" | "company";
 type DesignFilter = "all" | "logo" | "poster" | "instagram";
 
-const webFilterFn = (filter: WebFilter, type: ProjectType) => {
-  if (type === "dynamic") return filter === "all";
-  const maps: Record<WebFilter, number[]> = {
-    all: [1, 2, 3, 4, 5, 6, 7],
-    travel: [1, 2, 3],
-    cafe: [4, 5, 6],
-    company: [7],
-  };
-  return maps[filter];
+const WEB_FILTER_IDS: Record<WebFilter, number[]> = {
+  all: [1, 2, 3, 4, 5, 6, 7],
+  travel: [1, 2, 3],
+  cafe: [4, 5, 6],
+  company: [7],
 };
 
 export default function Home() {
@@ -66,37 +68,56 @@ export default function Home() {
   const [designFilter, setDesignFilter] = useState<DesignFilter>("all");
   const [activeTab, setActiveTab] = useState<"web" | "desain">("web");
   const [scrolled, setScrolled] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
+  const ticking = useRef(false);
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", handler);
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile, { passive: true });
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    const handler = () => {
+      if (!ticking.current) {
+        requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 40);
+          ticking.current = false;
+        });
+        ticking.current = true;
+      }
+    };
+    window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
   const filteredWeb = webProjects.filter((p) => {
     if (p.type !== webType) return false;
     if (webType === "dynamic") return true;
-    const ids = webFilterFn(webFilter, webType);
-    return Array.isArray(ids) ? ids.includes(p.id) : ids;
+    return WEB_FILTER_IDS[webFilter].includes(p.id);
   });
 
   const filteredDesign = designProjects.filter((d) =>
     designFilter === "all" ? true : d.category === designFilter
   );
 
+  // pakai animasi minimal di mobile / reduced motion
+  const anim = (shouldReduceMotion || isMobile) ? noAnim : fadeUp;
+  const animStagger = (shouldReduceMotion || isMobile) ? noAnim : stagger;
+  const animCard = (shouldReduceMotion || isMobile) ? noAnim : cardFade;
+
   return (
     <div className="bg-[#faf9f5] text-[#0a0a0a] min-h-screen" style={{ fontFamily: "'Inter', system-ui, sans-serif", fontWeight: 300 }}>
 
       {/* ── NAVBAR ── */}
-      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-[#faf9f5]/90 backdrop-blur-sm border-b border-[#e5e5e0]" : ""}`}>
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${scrolled ? "bg-[#faf9f5]/90 backdrop-blur-sm border-b border-[#e5e5e0]" : ""}`}>
         <div className="max-w-6xl mx-auto px-6 md:px-12 h-16 flex items-center justify-between">
           <span className="text-sm tracking-[0.2em] uppercase text-[#0a0a0a]" style={{ fontWeight: 400 }}>rfa</span>
           <nav className="hidden md:flex items-center gap-8">
             {["about", "portfolio", "contact"].map((id) => (
-              <a key={id} href={`#${id}`}
-                className="text-[11px] tracking-[0.18em] uppercase text-[#999] hover:text-[#0a0a0a] transition-colors duration-200">
-                {id}
-              </a>
+              <a key={id} href={`#${id}`} className="text-[11px] tracking-[0.18em] uppercase text-[#999] hover:text-[#0a0a0a] transition-colors duration-200">{id}</a>
             ))}
           </nav>
           <a href="mailto:rehanalay9@gmail.com"
@@ -108,38 +129,33 @@ export default function Home() {
 
       {/* ── HERO ── */}
       <section className="relative min-h-screen overflow-hidden">
-        {/* bg — full bleed, tidak dibatasi max-width */}
         <div className="absolute inset-0 z-0 pointer-events-none select-none">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/assets/bg-hero.png"
-            alt=""
+          <img src="/assets/bg-hero.png" alt=""
             className="hidden md:block absolute right-0 top-0 h-full w-auto max-w-none object-right object-cover"
-            style={{ opacity: 1 }}
+            fetchPriority="high" decoding="sync"
           />
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/assets/bg-mobile.png"
-            alt=""
+          <img src="/assets/bg-mobile.png" alt=""
             className="block md:hidden absolute right-0 top-0 h-full w-full object-cover object-center"
             style={{ opacity: 0.5 }}
+            fetchPriority="high" decoding="sync"
           />
         </div>
 
-        {/* content — max-width di sini */}
         <div className="relative z-10 min-h-screen flex flex-col justify-end pb-20 px-6 md:px-12 max-w-6xl mx-auto pt-32">
-          <motion.div initial="hidden" animate="visible" variants={stagger} className="space-y-6">
-            <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#aaa]">
+          <motion.div initial="hidden" animate="visible" variants={animStagger} className="space-y-6">
+            <motion.p variants={anim} className="text-[11px] tracking-[0.25em] uppercase text-[#aaa]">
               available for projects — 2026
             </motion.p>
-            <motion.h1 variants={fadeUp}
+            <motion.h1 variants={anim}
               className="text-[clamp(3rem,9vw,8rem)] leading-[0.92] tracking-[-0.02em] text-[#0a0a0a]"
               style={{ fontWeight: 300 }}>
               Raihan<br />
               <span className="text-[#c8c8c0]">Fajar</span><br />
               Aly
             </motion.h1>
-            <motion.div variants={fadeUp} className="pt-8 border-t border-[#e5e5e0] space-y-4">
+            <motion.div variants={anim} className="pt-8 border-t border-[#e5e5e0] space-y-4">
               <p className="text-[#888] text-sm md:text-base max-w-md leading-relaxed">
                 web developer & ui/ux designer based in indonesia. building clean, purposeful digital experiences that work.
               </p>
@@ -152,33 +168,36 @@ export default function Home() {
             </motion.div>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.6 }}
-            className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center">
-            <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-              className="w-[1px] h-8 bg-[#ccc]" />
-          </motion.div>
+          {/* scroll indicator — hanya desktop */}
+          {!isMobile && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.6 }}
+              className="hidden md:flex absolute bottom-10 left-1/2 -translate-x-1/2 flex-col items-center">
+              <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+                className="w-[1px] h-8 bg-[#ccc]" />
+            </motion.div>
+          )}
         </div>
       </section>
 
       {/* ── ABOUT — dark ── */}
       <section id="about" className="py-24 bg-[#0a0a0a] border-t border-[#1a1a1a]">
         <div className="px-6 md:px-12 max-w-6xl mx-auto">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={stagger}
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-60px" }} variants={animStagger}
             className="grid grid-cols-1 md:grid-cols-2 gap-16">
             <div className="space-y-6">
-              <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#555]">about</motion.p>
-              <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl leading-tight text-[#f0f0f0]" style={{ fontWeight: 300 }}>
+              <motion.p variants={anim} className="text-[11px] tracking-[0.25em] uppercase text-[#555]">about</motion.p>
+              <motion.h2 variants={anim} className="text-3xl md:text-4xl leading-tight text-[#f0f0f0]" style={{ fontWeight: 300 }}>
                 always learning,<br />always building.
               </motion.h2>
-              <motion.p variants={fadeUp} className="text-[#888] leading-relaxed text-sm">
+              <motion.p variants={anim} className="text-[#888] leading-relaxed text-sm">
                 18 tahun, dari indonesia. saya adalah seseorang yang percaya bahwa desain yang baik tidak perlu teriak keras — cukup berbicara tepat. belajar dari setiap project, setiap revision, setiap feedback.
               </motion.p>
-              <motion.p variants={fadeUp} className="text-[#666] leading-relaxed text-sm">
+              <motion.p variants={anim} className="text-[#666] leading-relaxed text-sm">
                 fokus di web development dan ui/ux design. juga mengerjakan graphic design dan branding.
               </motion.p>
             </div>
 
-            <motion.div variants={fadeUp} className="space-y-4">
+            <motion.div variants={anim} className="space-y-4">
               <p className="text-[11px] tracking-[0.25em] uppercase text-[#555] mb-6">stack & tools</p>
               {[
                 { label: "languages", items: ["HTML", "TypeScript", "JavaScript"] },
@@ -189,15 +208,14 @@ export default function Home() {
                   <p className="text-[10px] tracking-widest uppercase text-[#444] mb-3">{label}</p>
                   <div className="flex flex-wrap gap-2">
                     {items.map((item) => (
-                      <span key={item}
-                        className="text-[11px] font-mono border border-[#1f1f1f] px-3 py-1 text-[#666] hover:text-[#f0f0f0] hover:border-[#444] transition-colors cursor-default">
+                      <span key={item} className="text-[11px] font-mono border border-[#1f1f1f] px-3 py-1 text-[#666] hover:text-[#f0f0f0] hover:border-[#444] transition-colors cursor-default">
                         {item}
                       </span>
                     ))}
                   </div>
                 </div>
               ))}
-              <div className="border-t border-[#1a1a1a] pt-6 grid grid-cols-3 gap-4 mt-4">
+              <div className="border-t border-[#1a1a1a] pt-6 grid grid-cols-2 gap-4 mt-4">
                 {[{ num: "8+", label: "projects" }, { num: "3", label: "disciplines" }].map(({ num, label }) => (
                   <div key={label}>
                     <p className="text-2xl text-[#f0f0f0]" style={{ fontWeight: 300 }}>{num}</p>
@@ -213,14 +231,14 @@ export default function Home() {
       {/* ── PORTFOLIO — light ── */}
       <section id="portfolio" className="py-24 border-t border-[#e5e5e0]">
         <div className="px-6 md:px-12 max-w-6xl mx-auto">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={stagger}>
-            <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#aaa] mb-3">portfolio</motion.p>
-            <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl text-[#0a0a0a] mb-12" style={{ fontWeight: 300 }}>
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-60px" }} variants={animStagger}>
+            <motion.p variants={anim} className="text-[11px] tracking-[0.25em] uppercase text-[#aaa] mb-3">portfolio</motion.p>
+            <motion.h2 variants={anim} className="text-3xl md:text-4xl text-[#0a0a0a] mb-12" style={{ fontWeight: 300 }}>
               selected work
             </motion.h2>
 
-            {/* Main tab: web / design */}
-            <motion.div variants={fadeUp} className="flex items-end justify-between border-b border-[#e5e5e0] mb-6">
+            {/* main tab */}
+            <motion.div variants={anim} className="flex items-end justify-between border-b border-[#e5e5e0] mb-6">
               <div className="flex">
                 {(["web", "desain"] as const).map((tab) => (
                   <button key={tab} onClick={() => setActiveTab(tab)}
@@ -233,8 +251,6 @@ export default function Home() {
                   </button>
                 ))}
               </div>
-
-              {/* web sub-filter */}
               {activeTab === "web" && (
                 <div className="flex items-center gap-4 pb-3">
                   {(["static", "dynamic"] as ProjectType[]).map((t) => (
@@ -247,11 +263,11 @@ export default function Home() {
               )}
             </motion.div>
 
-            {/* category sub-filter for static */}
+            {/* category filters */}
             <AnimatePresence>
               {activeTab === "web" && webType === "static" && (
                 <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                  className="flex gap-3 mb-8 flex-wrap">
+                  transition={{ duration: 0.2 }} className="flex gap-3 mb-8 flex-wrap">
                   {(["all", "travel", "cafe", "company"] as WebFilter[]).map((f) => (
                     <button key={f} onClick={() => setWebFilter(f)}
                       className={`text-[10px] tracking-wider uppercase px-3 py-1 border transition-colors ${webFilter === f ? "border-[#0a0a0a] text-[#0a0a0a]" : "border-[#e5e5e0] text-[#bbb] hover:text-[#888] hover:border-[#ccc]"}`}>
@@ -262,11 +278,10 @@ export default function Home() {
               )}
             </AnimatePresence>
 
-            {/* design category sub-filter */}
             <AnimatePresence>
               {activeTab === "desain" && (
                 <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                  className="flex gap-3 mb-8 flex-wrap">
+                  transition={{ duration: 0.2 }} className="flex gap-3 mb-8 flex-wrap">
                   {(["all", "logo", "poster", "instagram"] as DesignFilter[]).map((f) => (
                     <button key={f} onClick={() => setDesignFilter(f)}
                       className={`text-[10px] tracking-wider uppercase px-3 py-1 border transition-colors ${designFilter === f ? "border-[#0a0a0a] text-[#0a0a0a]" : "border-[#e5e5e0] text-[#bbb] hover:text-[#888] hover:border-[#ccc]"}`}>
@@ -277,44 +292,33 @@ export default function Home() {
               )}
             </AnimatePresence>
 
-            {/* Content grid */}
+            {/* grid content */}
             <AnimatePresence mode="wait">
               {activeTab === "web" ? (
-                <motion.div key={`web-${webType}-${webFilter}`} variants={stagger} initial="hidden" animate="visible" exit={{ opacity: 0 }}
-                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-[#e5e5e0]">
+                <motion.div key={`web-${webType}-${webFilter}`}
+                  variants={animStagger} initial="hidden" animate="visible" exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[#e5e5e0]">
                   {filteredWeb.map((project) => (
-                    <motion.div key={project.id} variants={cardFade}
-                      className="bg-[#faf9f5] flex flex-col group hover:bg-white transition-colors duration-300">
-                      {/* thumbnail — klik buka live site */}
+                    <motion.div key={project.id} variants={animCard}
+                      className="bg-[#faf9f5] flex flex-col group hover:bg-white transition-colors duration-200">
                       <a href={project.live} target="_blank" rel="noreferrer" className="block overflow-hidden bg-[#f0f0ea]">
-                        <div className="overflow-hidden">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={project.image} alt={project.title}
-                            className="w-full h-auto object-contain group-hover:scale-[1.02] transition-transform duration-500 opacity-90 group-hover:opacity-100"
-                            loading="lazy" />
-                        </div>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={project.image} alt={project.title}
+                          className="w-full h-auto object-contain"
+                          style={{ transform: "translateZ(0)" }}
+                          loading="lazy" decoding="async" />
                       </a>
-                      {/* info */}
-                      <div className="p-6 flex flex-col flex-grow justify-between">
+                      <div className="p-5 flex flex-col flex-grow justify-between">
                         <div>
-                          <div className="flex justify-between items-start mb-3">
+                          <div className="flex justify-between items-start mb-2">
                             <span className="text-[10px] font-mono text-[#ccc] tracking-wider">{String(project.id).padStart(2, "0")}</span>
-                            <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                              {project.github && (
-                                <a href={project.github} target="_blank" rel="noreferrer" className="text-[#bbb] hover:text-[#0a0a0a] transition-colors">
-                                  <GithubIcon />
-                                </a>
-                              )}
-                              {project.live && (
-                                <a href={project.live} target="_blank" rel="noreferrer" className="text-[#bbb] hover:text-[#0a0a0a] transition-colors">
-                                  <ArrowUpRight />
-                                </a>
-                              )}
-                            </div>
+                            {project.live && (
+                              <a href={project.live} target="_blank" rel="noreferrer" className="text-[#bbb] hover:text-[#0a0a0a] transition-colors">
+                                <ArrowUpRight />
+                              </a>
+                            )}
                           </div>
-                          <h3 className="text-sm text-[#222] mb-1 group-hover:text-[#0a0a0a] transition-colors" style={{ fontWeight: 400 }}>
-                            {project.title}
-                          </h3>
+                          <h3 className="text-sm text-[#222] mb-1" style={{ fontWeight: 400 }}>{project.title}</h3>
                           <p className="text-[11px] text-[#aaa] leading-relaxed">{project.description}</p>
                         </div>
                         <div className="flex flex-wrap gap-1.5 mt-4">
@@ -327,17 +331,20 @@ export default function Home() {
                   ))}
                 </motion.div>
               ) : (
-                <motion.div key={`desain-${designFilter}`} variants={stagger} initial="hidden" animate="visible" exit={{ opacity: 0 }}
-                  className="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6">
+                <motion.div key={`desain-${designFilter}`}
+                  variants={animStagger} initial="hidden" animate="visible" exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                  className="columns-1 sm:columns-2 md:columns-3 gap-4">
                   {filteredDesign.map((d) => (
-                    <motion.div key={d.id} variants={cardFade} className="bg-[#faf9f5] border border-[#e5e5e0] group overflow-hidden break-inside-avoid">
-                      <a href={d.image} target="_blank" rel="noreferrer" className="block overflow-hidden">
+                    <motion.div key={d.id} variants={animCard}
+                      className="mb-4 bg-[#faf9f5] border border-[#e5e5e0] overflow-hidden break-inside-avoid">
+                      <a href={d.image} target="_blank" rel="noreferrer" className="block">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={d.image} alt={d.title}
-                          className="w-full h-auto object-contain group-hover:scale-[1.02] transition-transform duration-500"
-                          loading="lazy" />
+                          className="w-full h-auto"
+                          style={{ transform: "translateZ(0)", display: "block" }}
+                          loading="lazy" decoding="async" />
                       </a>
-                      <div className="px-5 py-4 border-t border-[#e5e5e0] flex justify-between items-center bg-[#faf9f5]">
+                      <div className="px-4 py-3 border-t border-[#e5e5e0] flex justify-between items-center">
                         <span className="text-xs text-[#555]" style={{ fontWeight: 400 }}>{d.title}</span>
                         <span className="text-[9px] font-mono text-[#bbb]">{d.tags[0]}</span>
                       </div>
@@ -353,23 +360,22 @@ export default function Home() {
       {/* ── CONTACT — dark ── */}
       <section id="contact" className="py-32 bg-[#0a0a0a] border-t border-[#1a1a1a]">
         <div className="px-6 md:px-12 max-w-6xl mx-auto">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={stagger}
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-60px" }} variants={animStagger}
             className="text-center space-y-8">
-            <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#555]">contact</motion.p>
-            <motion.h2 variants={fadeUp} className="text-[clamp(2.5rem,7vw,6rem)] leading-none text-[#f0f0f0]" style={{ fontWeight: 300 }}>
+            <motion.p variants={anim} className="text-[11px] tracking-[0.25em] uppercase text-[#555]">contact</motion.p>
+            <motion.h2 variants={anim} className="text-[clamp(2.5rem,7vw,6rem)] leading-none text-[#f0f0f0]" style={{ fontWeight: 300 }}>
               let's work<br />together
             </motion.h2>
-            <motion.p variants={fadeUp} className="text-[#666] text-sm max-w-md mx-auto">
+            <motion.p variants={anim} className="text-[#666] text-sm max-w-md mx-auto">
               open for freelance projects, collaborations, or just a conversation about design and development.
             </motion.p>
-            <motion.div variants={fadeUp}>
+            <motion.div variants={anim}>
               <a href="mailto:rehanalay9@gmail.com"
                 className="inline-flex items-center gap-3 border border-[#2a2a2a] px-8 py-4 text-sm tracking-[0.15em] uppercase text-[#888] hover:text-[#f0f0f0] hover:border-[#555] transition-all duration-300">
-                rehanalay9@gmail.com
-                <ArrowUpRight />
+                rehanalay9@gmail.com <ArrowUpRight />
               </a>
             </motion.div>
-            <motion.div variants={fadeUp} className="flex justify-center gap-8 pt-4">
+            <motion.div variants={anim} className="flex justify-center gap-8 pt-4">
               {[
                 { label: "github", href: "https://github.com/ggaku3076-ux" },
                 { label: "instagram", href: "https://instagram.com/raihnnf.a" },
