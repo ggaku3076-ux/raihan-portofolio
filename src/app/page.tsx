@@ -110,34 +110,19 @@ export default function Home() {
       <section className="relative min-h-screen overflow-hidden">
         {/* bg — full bleed, tidak dibatasi max-width */}
         <div className="absolute inset-0 z-0 pointer-events-none select-none">
-          {/* desktop: pojok kanan atas, max 45% lebar, tidak turun ke area icon */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/assets/bg-hero.png"
             alt=""
-            className="hidden md:block absolute right-0 top-0"
-            style={{
-              height: "75%",
-              width: "auto",
-              maxWidth: "50%",
-              objectFit: "contain",
-              objectPosition: "top right",
-              opacity: 1,
-            }}
+            className="hidden md:block absolute right-0 top-0 h-full w-auto max-w-none object-right object-cover"
+            style={{ opacity: 1 }}
           />
-          {/* mobile: pojok kanan atas, 55% lebar, tidak overlap teks */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/assets/bg-mobile.png"
             alt=""
-            className="block md:hidden absolute right-0 top-16"
-            style={{
-              height: "auto",
-              width: "55%",
-              objectFit: "contain",
-              objectPosition: "top right",
-              opacity: 0.6,
-            }}
+            className="block md:hidden absolute right-0 top-0 h-full w-full object-cover object-center"
+            style={{ opacity: 0.5 }}
           />
         </div>
 
@@ -154,7 +139,7 @@ export default function Home() {
               <span className="text-[#c8c8c0]">Fajar</span><br />
               Aly
             </motion.h1>
-            <motion.div variants={fadeUp} className="flex flex-col md:flex-row md:items-end justify-between gap-8 pt-8 border-t border-[#e5e5e0]">
+            <motion.div variants={fadeUp} className="pt-8 border-t border-[#e5e5e0] space-y-4">
               <p className="text-[#888] text-sm md:text-base max-w-md leading-relaxed">
                 web developer & ui/ux designer based in indonesia. building clean, purposeful digital experiences that work.
               </p>
