@@ -123,34 +123,35 @@ export default function Home() {
       </section>
 
       {/* ── ABOUT ── */}
-      <section id="about" className="py-24 px-6 md:px-12 max-w-6xl mx-auto border-t border-[#e5e5e0]">
+      <section id="about" className="py-24 bg-[#0a0a0a] border-t border-[#1a1a1a]">
+      <div className="px-6 md:px-12 max-w-6xl mx-auto">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={stagger}
           className="grid grid-cols-1 md:grid-cols-2 gap-16">
           <div className="space-y-6">
             <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#aaa]">about</motion.p>
-            <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl leading-tight text-[#0a0a0a]" style={{ fontWeight: 300 }}>
+            <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl leading-tight text-[#f0f0f0]" style={{ fontWeight: 300 }}>
               always learning,<br />always building.
             </motion.h2>
             <motion.p variants={fadeUp} className="text-[#888] leading-relaxed text-sm">
               18 tahun, dari indonesia. saya adalah seseorang yang percaya bahwa desain yang baik tidak perlu teriak keras — cukup berbicara tepat. saya belajar dari setiap project, setiap revision, setiap feedback.
             </motion.p>
-            <motion.p variants={fadeUp} className="text-[#aaa] leading-relaxed text-sm">
+            <motion.p variants={fadeUp} className="text-[#666] leading-relaxed text-sm">
               fokus di web development dan ui/ux design. juga mengerjakan graphic design saat dibutuhkan.
             </motion.p>
           </div>
 
           <motion.div variants={fadeUp} className="space-y-4">
-            <p className="text-[11px] tracking-[0.25em] uppercase text-[#aaa] mb-6">stack & tools</p>
+            <p className="text-[11px] tracking-[0.25em] uppercase text-[#666] mb-6">stack & tools</p>
             {[
               { label: "frontend", items: ["Next.js", "React", "TypeScript", "Tailwind CSS"] },
               { label: "design", items: ["Figma", "Adobe Illustrator", "Canva"] },
               { label: "other", items: ["Git", "Vercel", "Framer Motion"] },
             ].map(({ label, items }) => (
-              <div key={label} className="border-t border-[#e5e5e0] pt-4">
-                <p className="text-[10px] tracking-widest uppercase text-[#bbb] mb-3">{label}</p>
+              <div key={label} className="border-t border-[#1a1a1a] pt-4">
+                <p className="text-[10px] tracking-widest uppercase text-[#555] mb-3">{label}</p>
                 <div className="flex flex-wrap gap-2">
                   {items.map((item) => (
-                    <span key={item} className="text-[11px] font-mono border border-[#e0e0da] px-3 py-1 text-[#888] hover:text-[#0a0a0a] hover:border-[#0a0a0a] transition-colors cursor-default">
+                    <span key={item} className="text-[11px] font-mono border border-[#222] px-3 py-1 text-[#666] hover:text-[#f0f0f0] hover:border-[#444] transition-colors cursor-default">
                       {item}
                     </span>
                   ))}
@@ -158,20 +159,22 @@ export default function Home() {
               </div>
             ))}
 
-            <div className="border-t border-[#e5e5e0] pt-6 grid grid-cols-3 gap-4 mt-6">
+            <div className="border-t border-[#1a1a1a] pt-6 grid grid-cols-3 gap-4 mt-6">
               {[{ num: "7+", label: "projects" }, { num: "2+", label: "years learning" }, { num: "3", label: "disciplines" }].map(({ num, label }) => (
                 <div key={label}>
-                  <p className="text-2xl text-[#0a0a0a]" style={{ fontWeight: 300 }}>{num}</p>
-                  <p className="text-[10px] tracking-wider uppercase text-[#bbb] mt-1">{label}</p>
+                  <p className="text-2xl text-[#f0f0f0]" style={{ fontWeight: 300 }}>{num}</p>
+                  <p className="text-[10px] tracking-wider uppercase text-[#555] mt-1">{label}</p>
                 </div>
               ))}
             </div>
           </motion.div>
         </motion.div>
+      </div>
       </section>
 
       {/* ── PORTFOLIO ── */}
-      <section id="portfolio" className="py-24 px-6 md:px-12 max-w-6xl mx-auto border-t border-[#e5e5e0]">
+      <section id="portfolio" className="py-24 border-t border-[#e5e5e0]">
+      <div className="px-6 md:px-12 max-w-6xl mx-auto">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={stagger}>
           <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#aaa] mb-3">portfolio</motion.p>
           <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl text-[#0a0a0a] mb-12" style={{ fontWeight: 300 }}>
@@ -263,22 +266,24 @@ export default function Home() {
             )}
           </AnimatePresence>
         </motion.div>
+      </div>
       </section>
 
       {/* ── CONTACT ── */}
-      <section id="contact" className="py-32 px-6 md:px-12 max-w-6xl mx-auto border-t border-[#e5e5e0]">
+      <section id="contact" className="py-32 bg-[#0a0a0a] border-t border-[#1a1a1a]">
+      <div className="px-6 md:px-12 max-w-6xl mx-auto">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={stagger}
           className="text-center space-y-8">
-          <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#aaa]">contact</motion.p>
-          <motion.h2 variants={fadeUp} className="text-[clamp(2.5rem,7vw,6rem)] leading-none text-[#0a0a0a]" style={{ fontWeight: 300 }}>
+          <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#666]">contact</motion.p>
+          <motion.h2 variants={fadeUp} className="text-[clamp(2.5rem,7vw,6rem)] leading-none text-[#f0f0f0]" style={{ fontWeight: 300 }}>
             let's work<br />together
           </motion.h2>
-          <motion.p variants={fadeUp} className="text-[#aaa] text-sm max-w-md mx-auto">
+          <motion.p variants={fadeUp} className="text-[#888] text-sm max-w-md mx-auto">
             open for freelance projects, collaborations, or just a conversation about design and development.
           </motion.p>
           <motion.div variants={fadeUp}>
             <a href="mailto:rehanalay9@gmail.com"
-              className="inline-flex items-center gap-3 border border-[#ccc] px-8 py-4 text-sm tracking-[0.15em] uppercase text-[#888] hover:text-[#0a0a0a] hover:border-[#0a0a0a] transition-all duration-300">
+              className="inline-flex items-center gap-3 border border-[#2a2a2a] px-8 py-4 text-sm tracking-[0.15em] uppercase text-[#888] hover:text-[#f0f0f0] hover:border-[#555] transition-all duration-300">
               rehanalay9@gmail.com
               <ArrowUpRight />
             </a>
@@ -290,18 +295,21 @@ export default function Home() {
               { label: "tiktok", href: "https://tiktok.com/@raihnnfa" },
             ].map(({ label, href }) => (
               <a key={label} href={href} target="_blank" rel="noreferrer"
-                className="text-[11px] tracking-widest uppercase text-[#bbb] hover:text-[#0a0a0a] transition-colors">
+                className="text-[11px] tracking-widest uppercase text-[#555] hover:text-[#f0f0f0] transition-colors">
                 {label}
               </a>
             ))}
           </motion.div>
         </motion.div>
+      </div>
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="border-t border-[#e5e5e0] px-6 md:px-12 max-w-6xl mx-auto py-8 flex flex-col md:flex-row justify-between items-center gap-4">
-        <span className="text-[10px] font-mono text-[#bbb] tracking-widest">© 2026 raihan fajar aly</span>
-        <span className="text-[10px] font-mono text-[#ccc] tracking-widest">web developer & ui/ux designer</span>
+      <footer className="bg-[#0a0a0a] border-t border-[#1a1a1a] py-8">
+      <div className="px-6 md:px-12 max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+        <span className="text-[10px] font-mono text-[#333] tracking-widest">© 2026 raihan fajar aly</span>
+        <span className="text-[10px] font-mono text-[#444] tracking-widest">web developer & ui/ux designer</span>
+      </div>
       </footer>
     </div>
   );
