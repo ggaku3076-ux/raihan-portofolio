@@ -60,100 +60,97 @@ export default function Home() {
   const filteredWeb = webProjects.filter((p) => p.type === webType);
 
   return (
-    <div className="bg-[#0a0a0a] text-[#f0f0f0] min-h-screen" style={{ fontFamily: "'Inter', system-ui, sans-serif", fontWeight: 300 }}>
+    <div className="bg-[#faf9f5] text-[#0a0a0a] min-h-screen" style={{ fontFamily: "'Inter', system-ui, sans-serif", fontWeight: 300 }}>
 
       {/* ── NAVBAR ── */}
-      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-[#0a0a0a]/90 backdrop-blur-sm border-b border-[#1a1a1a]" : ""}`}>
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-[#faf9f5]/90 backdrop-blur-sm border-b border-[#e5e5e0]" : ""}`}>
         <div className="max-w-6xl mx-auto px-6 md:px-12 h-16 flex items-center justify-between">
-          <span className="text-sm tracking-[0.2em] uppercase text-[#f0f0f0]" style={{ fontWeight: 400 }}>
+          <span className="text-sm tracking-[0.2em] uppercase text-[#0a0a0a]" style={{ fontWeight: 400 }}>
             rfa
           </span>
           <nav className="hidden md:flex items-center gap-8">
             {["about", "portfolio", "design", "contact"].map((id) => (
               <a key={id} href={`#${id}`}
-                className="text-[11px] tracking-[0.18em] uppercase text-[#666] hover:text-[#f0f0f0] transition-colors duration-200">
+                className="text-[11px] tracking-[0.18em] uppercase text-[#999] hover:text-[#0a0a0a] transition-colors duration-200">
                 {id}
               </a>
             ))}
           </nav>
           <a href="mailto:rehanalay9@gmail.com"
-            className="hidden md:flex items-center gap-2 text-[11px] tracking-[0.15em] uppercase border border-[#2a2a2a] px-4 py-2 text-[#888] hover:text-[#f0f0f0] hover:border-[#555] transition-all duration-200">
+            className="hidden md:flex items-center gap-2 text-[11px] tracking-[0.15em] uppercase border border-[#ccc] px-4 py-2 text-[#666] hover:text-[#0a0a0a] hover:border-[#0a0a0a] transition-all duration-200">
             hire me
           </a>
         </div>
       </header>
 
       {/* ── HERO ── */}
-      <section className="min-h-screen flex flex-col justify-end pb-20 px-6 md:px-12 max-w-6xl mx-auto pt-32">
+      <section className="min-h-screen flex flex-col justify-end pb-20 px-6 md:px-12 max-w-6xl mx-auto pt-32 relative">
         <motion.div initial="hidden" animate="visible" variants={stagger} className="space-y-6">
-          <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#555]">
+          <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#aaa]">
             available for projects — 2026
           </motion.p>
 
           <motion.h1 variants={fadeUp}
-            className="text-[clamp(3rem,9vw,8rem)] leading-[0.92] tracking-[-0.02em] text-[#f0f0f0]"
+            className="text-[clamp(3rem,9vw,8rem)] leading-[0.92] tracking-[-0.02em] text-[#0a0a0a]"
             style={{ fontWeight: 300 }}>
             Raihan<br />
-            <span className="text-[#3a3a3a]">Fajar</span><br />
+            <span className="text-[#c8c8c0]">Fajar</span><br />
             Aly
           </motion.h1>
 
-          <motion.div variants={fadeUp} className="flex flex-col md:flex-row md:items-end justify-between gap-8 pt-8 border-t border-[#1a1a1a]">
-            <p className="text-[#666] text-sm md:text-base max-w-md leading-relaxed" style={{ fontWeight: 300 }}>
+          <motion.div variants={fadeUp} className="flex flex-col md:flex-row md:items-end justify-between gap-8 pt-8 border-t border-[#e5e5e0]">
+            <p className="text-[#888] text-sm md:text-base max-w-md leading-relaxed" style={{ fontWeight: 300 }}>
               web developer & ui/ux designer based in indonesia. building clean, purposeful digital experiences that work.
             </p>
             <div className="flex gap-6">
               <a href="https://github.com/ggaku3076-ux" target="_blank" rel="noreferrer"
-                className="text-[#555] hover:text-[#f0f0f0] transition-colors"><GithubIcon /></a>
+                className="text-[#bbb] hover:text-[#0a0a0a] transition-colors"><GithubIcon /></a>
               <a href="https://instagram.com/raihnnf.a" target="_blank" rel="noreferrer"
-                className="text-[#555] hover:text-[#f0f0f0] transition-colors"><InstagramIcon /></a>
+                className="text-[#bbb] hover:text-[#0a0a0a] transition-colors"><InstagramIcon /></a>
               <a href="https://tiktok.com/@raihnnfa" target="_blank" rel="noreferrer"
-                className="text-[#555] hover:text-[#f0f0f0] transition-colors"><TiktokIcon /></a>
+                className="text-[#bbb] hover:text-[#0a0a0a] transition-colors"><TiktokIcon /></a>
               <a href="mailto:rehanalay9@gmail.com"
-                className="text-[#555] hover:text-[#f0f0f0] transition-colors"><MailIcon /></a>
+                className="text-[#bbb] hover:text-[#0a0a0a] transition-colors"><MailIcon /></a>
             </div>
           </motion.div>
         </motion.div>
 
-        {/* scroll indicator */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.6 }}
           className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
           <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            className="w-[1px] h-8 bg-[#333]" />
+            className="w-[1px] h-8 bg-[#ccc]" />
         </motion.div>
       </section>
 
       {/* ── ABOUT ── */}
-      <section id="about" className="py-24 px-6 md:px-12 max-w-6xl mx-auto border-t border-[#1a1a1a]">
+      <section id="about" className="py-24 px-6 md:px-12 max-w-6xl mx-auto border-t border-[#e5e5e0]">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={stagger}
           className="grid grid-cols-1 md:grid-cols-2 gap-16">
           <div className="space-y-6">
-            <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#555]">
-              about
-            </motion.p>
-            <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl leading-tight text-[#f0f0f0]" style={{ fontWeight: 300 }}>
+            <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#aaa]">about</motion.p>
+            <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl leading-tight text-[#0a0a0a]" style={{ fontWeight: 300 }}>
               always learning,<br />always building.
             </motion.h2>
-            <motion.p variants={fadeUp} className="text-[#666] leading-relaxed text-sm">
+            <motion.p variants={fadeUp} className="text-[#888] leading-relaxed text-sm">
               18 tahun, dari indonesia. saya adalah seseorang yang percaya bahwa desain yang baik tidak perlu teriak keras — cukup berbicara tepat. saya belajar dari setiap project, setiap revision, setiap feedback.
             </motion.p>
-            <motion.p variants={fadeUp} className="text-[#555] leading-relaxed text-sm">
+            <motion.p variants={fadeUp} className="text-[#aaa] leading-relaxed text-sm">
               fokus di web development dan ui/ux design. juga mengerjakan graphic design saat dibutuhkan.
             </motion.p>
           </div>
 
           <motion.div variants={fadeUp} className="space-y-4">
-            <p className="text-[11px] tracking-[0.25em] uppercase text-[#555] mb-6">stack & tools</p>
+            <p className="text-[11px] tracking-[0.25em] uppercase text-[#aaa] mb-6">stack & tools</p>
             {[
               { label: "frontend", items: ["Next.js", "React", "TypeScript", "Tailwind CSS"] },
               { label: "design", items: ["Figma", "Adobe Illustrator", "Canva"] },
               { label: "other", items: ["Git", "Vercel", "Framer Motion"] },
             ].map(({ label, items }) => (
-              <div key={label} className="border-t border-[#1a1a1a] pt-4">
-                <p className="text-[10px] tracking-widest uppercase text-[#444] mb-3">{label}</p>
+              <div key={label} className="border-t border-[#e5e5e0] pt-4">
+                <p className="text-[10px] tracking-widest uppercase text-[#bbb] mb-3">{label}</p>
                 <div className="flex flex-wrap gap-2">
                   {items.map((item) => (
-                    <span key={item} className="text-[11px] font-mono border border-[#222] px-3 py-1 text-[#666] hover:text-[#f0f0f0] hover:border-[#444] transition-colors cursor-default">
+                    <span key={item} className="text-[11px] font-mono border border-[#e0e0da] px-3 py-1 text-[#888] hover:text-[#0a0a0a] hover:border-[#0a0a0a] transition-colors cursor-default">
                       {item}
                     </span>
                   ))}
@@ -161,11 +158,11 @@ export default function Home() {
               </div>
             ))}
 
-            <div className="border-t border-[#1a1a1a] pt-6 grid grid-cols-3 gap-4 mt-6">
+            <div className="border-t border-[#e5e5e0] pt-6 grid grid-cols-3 gap-4 mt-6">
               {[{ num: "7+", label: "projects" }, { num: "2+", label: "years learning" }, { num: "3", label: "disciplines" }].map(({ num, label }) => (
                 <div key={label}>
-                  <p className="text-2xl text-[#f0f0f0]" style={{ fontWeight: 300 }}>{num}</p>
-                  <p className="text-[10px] tracking-wider uppercase text-[#444] mt-1">{label}</p>
+                  <p className="text-2xl text-[#0a0a0a]" style={{ fontWeight: 300 }}>{num}</p>
+                  <p className="text-[10px] tracking-wider uppercase text-[#bbb] mt-1">{label}</p>
                 </div>
               ))}
             </div>
@@ -174,24 +171,21 @@ export default function Home() {
       </section>
 
       {/* ── PORTFOLIO ── */}
-      <section id="portfolio" className="py-24 px-6 md:px-12 max-w-6xl mx-auto border-t border-[#1a1a1a]">
+      <section id="portfolio" className="py-24 px-6 md:px-12 max-w-6xl mx-auto border-t border-[#e5e5e0]">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={stagger}>
-          <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#555] mb-3">
-            portfolio
-          </motion.p>
-          <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl text-[#f0f0f0] mb-12" style={{ fontWeight: 300 }}>
+          <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#aaa] mb-3">portfolio</motion.p>
+          <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl text-[#0a0a0a] mb-12" style={{ fontWeight: 300 }}>
             selected work
           </motion.h2>
 
-          {/* Tab bar */}
-          <motion.div variants={fadeUp} className="flex items-end justify-between border-b border-[#1a1a1a] mb-10">
+          <motion.div variants={fadeUp} className="flex items-end justify-between border-b border-[#e5e5e0] mb-10">
             <div className="flex" id="design">
               {(["web", "desain"] as const).map((tab) => (
                 <button key={tab} onClick={() => setActiveTab(tab)}
-                  className={`relative pb-3 mr-8 text-[11px] tracking-[0.18em] uppercase transition-colors duration-200 ${activeTab === tab ? "text-[#f0f0f0]" : "text-[#444] hover:text-[#888]"}`}>
+                  className={`relative pb-3 mr-8 text-[11px] tracking-[0.18em] uppercase transition-colors duration-200 ${activeTab === tab ? "text-[#0a0a0a]" : "text-[#bbb] hover:text-[#888]"}`}>
                   {tab === "web" ? "web portfolio" : "design work"}
                   {activeTab === tab && (
-                    <motion.div layoutId="underline" className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#f0f0f0]"
+                    <motion.div layoutId="underline" className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#0a0a0a]"
                       transition={{ type: "spring", stiffness: 380, damping: 32 }} />
                   )}
                 </button>
@@ -202,7 +196,7 @@ export default function Home() {
               <div className="flex items-center gap-4 pb-3">
                 {(["static", "dynamic"] as ProjectType[]).map((t) => (
                   <button key={t} onClick={() => setWebType(t)}
-                    className={`text-[10px] tracking-wider uppercase transition-colors ${webType === t ? "text-[#f0f0f0]" : "text-[#444] hover:text-[#888]"}`}>
+                    className={`text-[10px] tracking-wider uppercase transition-colors ${webType === t ? "text-[#0a0a0a]" : "text-[#bbb] hover:text-[#888]"}`}>
                     {t} ({webProjects.filter(p => p.type === t).length})
                   </button>
                 ))}
@@ -210,38 +204,37 @@ export default function Home() {
             )}
           </motion.div>
 
-          {/* Content */}
           <AnimatePresence mode="wait">
             {activeTab === "web" ? (
               <motion.div key={`web-${webType}`} variants={stagger} initial="hidden" animate="visible" exit={{ opacity: 0 }}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-[#1a1a1a]">
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-[#e5e5e0]">
                 {filteredWeb.map((project) => (
                   <motion.div key={project.id} variants={cardFade}
-                    className="bg-[#0a0a0a] p-8 flex flex-col justify-between group hover:bg-[#111] transition-colors duration-300 min-h-[220px]">
+                    className="bg-[#faf9f5] p-8 flex flex-col justify-between group hover:bg-white transition-colors duration-300 min-h-[220px]">
                     <div>
                       <div className="flex justify-between items-start mb-6">
-                        <span className="text-[10px] font-mono text-[#333] tracking-wider">{String(project.id).padStart(2, "0")}</span>
+                        <span className="text-[10px] font-mono text-[#ccc] tracking-wider">{String(project.id).padStart(2, "0")}</span>
                         <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                           {project.github && (
-                            <a href={project.github} target="_blank" rel="noreferrer" className="text-[#555] hover:text-[#f0f0f0] transition-colors">
+                            <a href={project.github} target="_blank" rel="noreferrer" className="text-[#bbb] hover:text-[#0a0a0a] transition-colors">
                               <GithubIcon />
                             </a>
                           )}
                           {project.live && (
-                            <a href={project.live} target="_blank" rel="noreferrer" className="text-[#555] hover:text-[#f0f0f0] transition-colors">
+                            <a href={project.live} target="_blank" rel="noreferrer" className="text-[#bbb] hover:text-[#0a0a0a] transition-colors">
                               <ArrowUpRight />
                             </a>
                           )}
                         </div>
                       </div>
-                      <h3 className="text-base text-[#d0d0d0] mb-2 group-hover:text-[#f0f0f0] transition-colors" style={{ fontWeight: 400 }}>
+                      <h3 className="text-base text-[#222] mb-2 group-hover:text-[#0a0a0a] transition-colors" style={{ fontWeight: 400 }}>
                         {project.title}
                       </h3>
-                      <p className="text-[12px] text-[#444] leading-relaxed">{project.description}</p>
+                      <p className="text-[12px] text-[#aaa] leading-relaxed">{project.description}</p>
                     </div>
                     <div className="flex flex-wrap gap-1.5 mt-6">
                       {project.tags.map((tag) => (
-                        <span key={tag} className="text-[9px] font-mono text-[#3a3a3a] border border-[#1a1a1a] px-2 py-0.5">
+                        <span key={tag} className="text-[9px] font-mono text-[#bbb] border border-[#e5e5e0] px-2 py-0.5">
                           {tag}
                         </span>
                       ))}
@@ -251,19 +244,18 @@ export default function Home() {
               </motion.div>
             ) : (
               <motion.div key="desain" variants={stagger} initial="hidden" animate="visible" exit={{ opacity: 0 }}
-                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-px bg-[#1a1a1a]">
+                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-px bg-[#e5e5e0]">
                 {designProjects.map((d) => (
-                  <motion.div key={d.id} variants={cardFade}
-                    className="bg-[#0a0a0a] group overflow-hidden">
+                  <motion.div key={d.id} variants={cardFade} className="bg-[#faf9f5] group overflow-hidden">
                     <div className="aspect-[4/3] overflow-hidden">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={d.image} alt={d.title}
-                        className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         loading="lazy" />
                     </div>
-                    <div className="px-5 py-4 border-t border-[#1a1a1a] flex justify-between items-center">
-                      <span className="text-xs text-[#888]" style={{ fontWeight: 400 }}>{d.title}</span>
-                      <span className="text-[9px] font-mono text-[#333]">{d.tags[0]}</span>
+                    <div className="px-5 py-4 border-t border-[#e5e5e0] flex justify-between items-center">
+                      <span className="text-xs text-[#555]" style={{ fontWeight: 400 }}>{d.title}</span>
+                      <span className="text-[9px] font-mono text-[#bbb]">{d.tags[0]}</span>
                     </div>
                   </motion.div>
                 ))}
@@ -274,21 +266,19 @@ export default function Home() {
       </section>
 
       {/* ── CONTACT ── */}
-      <section id="contact" className="py-32 px-6 md:px-12 max-w-6xl mx-auto border-t border-[#1a1a1a]">
+      <section id="contact" className="py-32 px-6 md:px-12 max-w-6xl mx-auto border-t border-[#e5e5e0]">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={stagger}
           className="text-center space-y-8">
-          <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#555]">
-            contact
-          </motion.p>
-          <motion.h2 variants={fadeUp} className="text-[clamp(2.5rem,7vw,6rem)] leading-none text-[#f0f0f0]" style={{ fontWeight: 300 }}>
+          <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#aaa]">contact</motion.p>
+          <motion.h2 variants={fadeUp} className="text-[clamp(2.5rem,7vw,6rem)] leading-none text-[#0a0a0a]" style={{ fontWeight: 300 }}>
             let's work<br />together
           </motion.h2>
-          <motion.p variants={fadeUp} className="text-[#555] text-sm max-w-md mx-auto">
+          <motion.p variants={fadeUp} className="text-[#aaa] text-sm max-w-md mx-auto">
             open for freelance projects, collaborations, or just a conversation about design and development.
           </motion.p>
           <motion.div variants={fadeUp}>
             <a href="mailto:rehanalay9@gmail.com"
-              className="inline-flex items-center gap-3 border border-[#2a2a2a] px-8 py-4 text-sm tracking-[0.15em] uppercase text-[#888] hover:text-[#f0f0f0] hover:border-[#555] transition-all duration-300">
+              className="inline-flex items-center gap-3 border border-[#ccc] px-8 py-4 text-sm tracking-[0.15em] uppercase text-[#888] hover:text-[#0a0a0a] hover:border-[#0a0a0a] transition-all duration-300">
               rehanalay9@gmail.com
               <ArrowUpRight />
             </a>
@@ -300,7 +290,7 @@ export default function Home() {
               { label: "tiktok", href: "https://tiktok.com/@raihnnfa" },
             ].map(({ label, href }) => (
               <a key={label} href={href} target="_blank" rel="noreferrer"
-                className="text-[11px] tracking-widest uppercase text-[#444] hover:text-[#f0f0f0] transition-colors">
+                className="text-[11px] tracking-widest uppercase text-[#bbb] hover:text-[#0a0a0a] transition-colors">
                 {label}
               </a>
             ))}
@@ -309,13 +299,9 @@ export default function Home() {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="border-t border-[#1a1a1a] px-6 md:px-12 max-w-6xl mx-auto py-8 flex flex-col md:flex-row justify-between items-center gap-4">
-        <span className="text-[10px] font-mono text-[#333] tracking-widest">
-          © 2026 raihan fajar aly
-        </span>
-        <span className="text-[10px] font-mono text-[#2a2a2a] tracking-widest">
-          web developer & ui/ux designer
-        </span>
+      <footer className="border-t border-[#e5e5e0] px-6 md:px-12 max-w-6xl mx-auto py-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <span className="text-[10px] font-mono text-[#bbb] tracking-widest">© 2026 raihan fajar aly</span>
+        <span className="text-[10px] font-mono text-[#ccc] tracking-widest">web developer & ui/ux designer</span>
       </footer>
     </div>
   );
