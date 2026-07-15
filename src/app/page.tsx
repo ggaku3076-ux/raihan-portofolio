@@ -109,20 +109,35 @@ export default function Home() {
       {/* ── HERO ── */}
       <section className="relative min-h-screen overflow-hidden">
         {/* bg — full bleed, tidak dibatasi max-width */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 z-0 pointer-events-none select-none">
+          {/* desktop: pojok kanan atas, max 45% lebar, tidak turun ke area icon */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/assets/bg-hero.png"
             alt=""
-            className="hidden md:block absolute right-0 top-0 h-full w-auto max-w-none object-right object-cover"
-            style={{ opacity: 1 }}
+            className="hidden md:block absolute right-0 top-0"
+            style={{
+              height: "75%",
+              width: "auto",
+              maxWidth: "50%",
+              objectFit: "contain",
+              objectPosition: "top right",
+              opacity: 1,
+            }}
           />
+          {/* mobile: pojok kanan atas, 55% lebar, tidak overlap teks */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/assets/bg-mobile.png"
             alt=""
-            className="block md:hidden absolute right-0 top-0 h-full w-full object-cover object-center"
-            style={{ opacity: 0.5 }}
+            className="block md:hidden absolute right-0 top-16"
+            style={{
+              height: "auto",
+              width: "55%",
+              objectFit: "contain",
+              objectPosition: "top right",
+              opacity: 0.6,
+            }}
           />
         </div>
 
@@ -287,10 +302,10 @@ export default function Home() {
                       className="bg-[#faf9f5] flex flex-col group hover:bg-white transition-colors duration-300">
                       {/* thumbnail — klik buka live site */}
                       <a href={project.live} target="_blank" rel="noreferrer" className="block overflow-hidden bg-[#f0f0ea]">
-                        <div className="aspect-[16/9] overflow-hidden">
+                        <div className="overflow-hidden">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img src={project.image} alt={project.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
+                            className="w-full h-auto object-contain group-hover:scale-[1.02] transition-transform duration-500 opacity-90 group-hover:opacity-100"
                             loading="lazy" />
                         </div>
                       </a>
