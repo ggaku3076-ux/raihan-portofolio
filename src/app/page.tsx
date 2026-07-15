@@ -1,357 +1,321 @@
-"use client"
-import React, { useState } from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Variants } from "framer-motion";
 import { webProjects, designProjects, ProjectType } from "../data/projects";
 
-// SVG Icons to avoid lucide-react version mismatches
-const ArrowUpRightIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <line x1="7" y1="17" x2="17" y2="7"></line>
-    <polyline points="7 7 17 7 17 17"></polyline>
+const ArrowUpRight = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/>
   </svg>
 );
-
 const GithubIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
   </svg>
 );
-
-const InstagramIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-  </svg>
-);
-
 const MailIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-    <polyline points="22,6 12,13 2,6"></polyline>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+    <polyline points="22,6 12,13 2,6"/>
   </svg>
 );
+const InstagramIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+  </svg>
+);
+const TiktokIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
+  </svg>
+);
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+};
+const stagger: Variants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.07, delayChildren: 0.1 } },
+};
+const cardFade: Variants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
+};
 
 export default function Home() {
   const [webType, setWebType] = useState<ProjectType>("static");
   const [activeTab, setActiveTab] = useState<"web" | "desain">("web");
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", handler);
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
 
   const filteredWeb = webProjects.filter((p) => p.type === webType);
 
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.05, delayChildren: 0.1 },
-    },
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 10 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.4, ease: "easeOut" },
-    },
-  };
-
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-[#f5f5f5] font-light selection:bg-[#f5f5f5] selection:text-[#0a0a0a] px-4 md:px-8 py-16 max-w-5xl mx-auto flex flex-col justify-between">
-      {/* Header / Hero */}
-      <header className="mb-20">
-        <motion.div
-          initial={{ opacity: 0, y: 5 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex flex-col gap-6"
-        >
-          <div className="flex justify-between items-start">
-            <div>
-              <h1 className="text-2xl md:text-3xl tracking-wide font-normal text-[#f5f5f5]">
-                raihan fajar aly
-              </h1>
-              <p className="text-xs text-[#6b6b6b] mt-1 tracking-widest uppercase">
-                web developer & ui/ux designer • 18 y.o.
-              </p>
-            </div>
-            <div className="flex gap-4">
-              <a
-                href="mailto:rehanalay9@gmail.com"
-                className="text-[#6b6b6b] hover:text-[#f5f5f5] transition-colors"
-                aria-label="Email"
-              >
-                <MailIcon />
-              </a>
-              <a
-                href="https://github.com/ggaku3076-ux"
-                target="_blank"
-                rel="noreferrer"
-                className="text-[#6b6b6b] hover:text-[#f5f5f5] transition-colors"
-                aria-label="GitHub"
-              >
-                <GithubIcon />
-              </a>
-              <a
-                href="https://instagram.com/raihnnf.a"
-                target="_blank"
-                rel="noreferrer"
-                className="text-[#6b6b6b] hover:text-[#f5f5f5] transition-colors"
-                aria-label="Instagram"
-              >
-                <InstagramIcon />
-              </a>
-            </div>
-          </div>
+    <div className="bg-[#0a0a0a] text-[#f0f0f0] min-h-screen" style={{ fontFamily: "'Inter', system-ui, sans-serif", fontWeight: 300 }}>
 
-          <p className="text-lg md:text-xl font-light text-[#a3a3a3] max-w-xl leading-relaxed mt-4">
-            building with intent, designing with purpose. interested in creating
-            highly responsive web applications and clean aesthetic interface
-            layouts.
-          </p>
-
-          <div className="flex flex-wrap gap-2 mt-2">
-            {["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion", "Figma"].map(
-              (skill) => (
-                <span
-                  key={skill}
-                  className="px-3 py-1 text-[11px] font-mono tracking-wider border border-[#1f1f1f] text-[#888]"
-                >
-                  {skill}
-                </span>
-              )
-            )}
-          </div>
-        </motion.div>
+      {/* ── NAVBAR ── */}
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-[#0a0a0a]/90 backdrop-blur-sm border-b border-[#1a1a1a]" : ""}`}>
+        <div className="max-w-6xl mx-auto px-6 md:px-12 h-16 flex items-center justify-between">
+          <span className="text-sm tracking-[0.2em] uppercase text-[#f0f0f0]" style={{ fontWeight: 400 }}>
+            rfa
+          </span>
+          <nav className="hidden md:flex items-center gap-8">
+            {["about", "portfolio", "design", "contact"].map((id) => (
+              <a key={id} href={`#${id}`}
+                className="text-[11px] tracking-[0.18em] uppercase text-[#666] hover:text-[#f0f0f0] transition-colors duration-200">
+                {id}
+              </a>
+            ))}
+          </nav>
+          <a href="mailto:rehanalay9@gmail.com"
+            className="hidden md:flex items-center gap-2 text-[11px] tracking-[0.15em] uppercase border border-[#2a2a2a] px-4 py-2 text-[#888] hover:text-[#f0f0f0] hover:border-[#555] transition-all duration-200">
+            hire me
+          </a>
+        </div>
       </header>
 
-      {/* Navigation Tabs */}
-      <main className="flex-grow">
-        <div className="border-b border-[#1f1f1f] mb-12 flex justify-between items-end">
-          <div className="flex gap-8">
-            <button
-              onClick={() => setActiveTab("web")}
-              className={`pb-3 text-sm tracking-widest uppercase transition-colors relative ${
-                activeTab === "web" ? "text-[#f5f5f5]" : "text-[#6b6b6b] hover:text-[#a3a3a3]"
-              }`}
-            >
-              web portfolio
-              {activeTab === "web" && (
-                <motion.div
-                  layoutId="activeTabUnderline"
-                  className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#f5f5f5]"
-                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                />
-              )}
-            </button>
-            <button
-              onClick={() => setActiveTab("desain")}
-              className={`pb-3 text-sm tracking-widest uppercase transition-colors relative ${
-                activeTab === "desain" ? "text-[#f5f5f5]" : "text-[#6b6b6b] hover:text-[#a3a3a3]"
-              }`}
-            >
-              design work
-              {activeTab === "desain" && (
-                <motion.div
-                  layoutId="activeTabUnderline"
-                  className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#f5f5f5]"
-                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                />
-              )}
-            </button>
+      {/* ── HERO ── */}
+      <section className="min-h-screen flex flex-col justify-end pb-20 px-6 md:px-12 max-w-6xl mx-auto pt-32">
+        <motion.div initial="hidden" animate="visible" variants={stagger} className="space-y-6">
+          <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#555]">
+            available for projects — 2026
+          </motion.p>
+
+          <motion.h1 variants={fadeUp}
+            className="text-[clamp(3rem,9vw,8rem)] leading-[0.92] tracking-[-0.02em] text-[#f0f0f0]"
+            style={{ fontWeight: 300 }}>
+            Raihan<br />
+            <span className="text-[#3a3a3a]">Fajar</span><br />
+            Aly
+          </motion.h1>
+
+          <motion.div variants={fadeUp} className="flex flex-col md:flex-row md:items-end justify-between gap-8 pt-8 border-t border-[#1a1a1a]">
+            <p className="text-[#666] text-sm md:text-base max-w-md leading-relaxed" style={{ fontWeight: 300 }}>
+              web developer & ui/ux designer based in indonesia. building clean, purposeful digital experiences that work.
+            </p>
+            <div className="flex gap-6">
+              <a href="https://github.com/ggaku3076-ux" target="_blank" rel="noreferrer"
+                className="text-[#555] hover:text-[#f0f0f0] transition-colors"><GithubIcon /></a>
+              <a href="https://instagram.com/raihnnf.a" target="_blank" rel="noreferrer"
+                className="text-[#555] hover:text-[#f0f0f0] transition-colors"><InstagramIcon /></a>
+              <a href="https://tiktok.com/@raihnnfa" target="_blank" rel="noreferrer"
+                className="text-[#555] hover:text-[#f0f0f0] transition-colors"><TiktokIcon /></a>
+              <a href="mailto:rehanalay9@gmail.com"
+                className="text-[#555] hover:text-[#f0f0f0] transition-colors"><MailIcon /></a>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* scroll indicator */}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.6 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+          <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            className="w-[1px] h-8 bg-[#333]" />
+        </motion.div>
+      </section>
+
+      {/* ── ABOUT ── */}
+      <section id="about" className="py-24 px-6 md:px-12 max-w-6xl mx-auto border-t border-[#1a1a1a]">
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={stagger}
+          className="grid grid-cols-1 md:grid-cols-2 gap-16">
+          <div className="space-y-6">
+            <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#555]">
+              about
+            </motion.p>
+            <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl leading-tight text-[#f0f0f0]" style={{ fontWeight: 300 }}>
+              always learning,<br />always building.
+            </motion.h2>
+            <motion.p variants={fadeUp} className="text-[#666] leading-relaxed text-sm">
+              18 tahun, dari indonesia. saya adalah seseorang yang percaya bahwa desain yang baik tidak perlu teriak keras — cukup berbicara tepat. saya belajar dari setiap project, setiap revision, setiap feedback.
+            </motion.p>
+            <motion.p variants={fadeUp} className="text-[#555] leading-relaxed text-sm">
+              fokus di web development dan ui/ux design. juga mengerjakan graphic design saat dibutuhkan.
+            </motion.p>
           </div>
 
-          {activeTab === "web" && (
-            <div className="flex gap-4 pb-3">
-              <button
-                onClick={() => setWebType("static")}
-                className={`text-xs tracking-wider transition-colors ${
-                  webType === "static" ? "text-[#f5f5f5]" : "text-[#6b6b6b] hover:text-[#a3a3a3]"
-                }`}
-              >
-                static ({webProjects.filter((p) => p.type === "static").length})
-              </button>
-              <span className="text-[#1f1f1f]">|</span>
-              <button
-                onClick={() => setWebType("dynamic")}
-                className={`text-xs tracking-wider transition-colors ${
-                  webType === "dynamic" ? "text-[#f5f5f5]" : "text-[#6b6b6b] hover:text-[#a3a3a3]"
-                }`}
-              >
-                dynamic ({webProjects.filter((p) => p.type === "dynamic").length})
-              </button>
+          <motion.div variants={fadeUp} className="space-y-4">
+            <p className="text-[11px] tracking-[0.25em] uppercase text-[#555] mb-6">stack & tools</p>
+            {[
+              { label: "frontend", items: ["Next.js", "React", "TypeScript", "Tailwind CSS"] },
+              { label: "design", items: ["Figma", "Adobe Illustrator", "Canva"] },
+              { label: "other", items: ["Git", "Vercel", "Framer Motion"] },
+            ].map(({ label, items }) => (
+              <div key={label} className="border-t border-[#1a1a1a] pt-4">
+                <p className="text-[10px] tracking-widest uppercase text-[#444] mb-3">{label}</p>
+                <div className="flex flex-wrap gap-2">
+                  {items.map((item) => (
+                    <span key={item} className="text-[11px] font-mono border border-[#222] px-3 py-1 text-[#666] hover:text-[#f0f0f0] hover:border-[#444] transition-colors cursor-default">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+
+            <div className="border-t border-[#1a1a1a] pt-6 grid grid-cols-3 gap-4 mt-6">
+              {[{ num: "7+", label: "projects" }, { num: "2+", label: "years learning" }, { num: "3", label: "disciplines" }].map(({ num, label }) => (
+                <div key={label}>
+                  <p className="text-2xl text-[#f0f0f0]" style={{ fontWeight: 300 }}>{num}</p>
+                  <p className="text-[10px] tracking-wider uppercase text-[#444] mt-1">{label}</p>
+                </div>
+              ))}
             </div>
-          )}
-        </div>
+          </motion.div>
+        </motion.div>
+      </section>
 
-        {/* Portfolio Content */}
-        <AnimatePresence mode="wait">
-          {activeTab === "web" ? (
-            <motion.div
-              key={`web-${webType}`}
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-              className="grid grid-cols-1 md:grid-cols-2 gap-6"
-            >
-              {filteredWeb.map((project) => (
-                <motion.div
-                  key={project.id}
-                  variants={itemVariants}
-                  className="border border-[#1f1f1f] bg-[#111111]/30 p-6 flex flex-col justify-between hover:border-[#333333] transition-colors group duration-300"
-                >
-                  <div>
-                    <div className="flex justify-between items-start mb-4">
-                      <span className="text-[10px] font-mono text-[#6b6b6b]">
-                        {project.year}
-                      </span>
-                      <div className="flex gap-3">
-                        {project.github && (
-                          <a
-                            href={project.github}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-[#6b6b6b] hover:text-[#f5f5f5] transition-colors"
-                          >
-                            <GithubIcon />
-                          </a>
-                        )}
-                        {project.live && (
-                          <a
-                            href={project.live}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-[#6b6b6b] hover:text-[#f5f5f5] transition-colors"
-                          >
-                            <ArrowUpRightIcon />
-                          </a>
-                        )}
+      {/* ── PORTFOLIO ── */}
+      <section id="portfolio" className="py-24 px-6 md:px-12 max-w-6xl mx-auto border-t border-[#1a1a1a]">
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={stagger}>
+          <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#555] mb-3">
+            portfolio
+          </motion.p>
+          <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl text-[#f0f0f0] mb-12" style={{ fontWeight: 300 }}>
+            selected work
+          </motion.h2>
+
+          {/* Tab bar */}
+          <motion.div variants={fadeUp} className="flex items-end justify-between border-b border-[#1a1a1a] mb-10">
+            <div className="flex" id="design">
+              {(["web", "desain"] as const).map((tab) => (
+                <button key={tab} onClick={() => setActiveTab(tab)}
+                  className={`relative pb-3 mr-8 text-[11px] tracking-[0.18em] uppercase transition-colors duration-200 ${activeTab === tab ? "text-[#f0f0f0]" : "text-[#444] hover:text-[#888]"}`}>
+                  {tab === "web" ? "web portfolio" : "design work"}
+                  {activeTab === tab && (
+                    <motion.div layoutId="underline" className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#f0f0f0]"
+                      transition={{ type: "spring", stiffness: 380, damping: 32 }} />
+                  )}
+                </button>
+              ))}
+            </div>
+
+            {activeTab === "web" && (
+              <div className="flex items-center gap-4 pb-3">
+                {(["static", "dynamic"] as ProjectType[]).map((t) => (
+                  <button key={t} onClick={() => setWebType(t)}
+                    className={`text-[10px] tracking-wider uppercase transition-colors ${webType === t ? "text-[#f0f0f0]" : "text-[#444] hover:text-[#888]"}`}>
+                    {t} ({webProjects.filter(p => p.type === t).length})
+                  </button>
+                ))}
+              </div>
+            )}
+          </motion.div>
+
+          {/* Content */}
+          <AnimatePresence mode="wait">
+            {activeTab === "web" ? (
+              <motion.div key={`web-${webType}`} variants={stagger} initial="hidden" animate="visible" exit={{ opacity: 0 }}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-[#1a1a1a]">
+                {filteredWeb.map((project) => (
+                  <motion.div key={project.id} variants={cardFade}
+                    className="bg-[#0a0a0a] p-8 flex flex-col justify-between group hover:bg-[#111] transition-colors duration-300 min-h-[220px]">
+                    <div>
+                      <div className="flex justify-between items-start mb-6">
+                        <span className="text-[10px] font-mono text-[#333] tracking-wider">{String(project.id).padStart(2, "0")}</span>
+                        <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                          {project.github && (
+                            <a href={project.github} target="_blank" rel="noreferrer" className="text-[#555] hover:text-[#f0f0f0] transition-colors">
+                              <GithubIcon />
+                            </a>
+                          )}
+                          {project.live && (
+                            <a href={project.live} target="_blank" rel="noreferrer" className="text-[#555] hover:text-[#f0f0f0] transition-colors">
+                              <ArrowUpRight />
+                            </a>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                    <h3 className="text-[16px] font-normal mb-2 text-[#f5f5f5] group-hover:text-white transition-colors">
-                      {project.title}
-                    </h3>
-                    <p className="text-xs text-[#888888] leading-relaxed mb-6">
-                      {project.description}
-                    </p>
-                  </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[9px] font-mono border border-[#1f1f1f] px-2 py-0.5 text-[#555555]"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          ) : (
-            <motion.div
-              key="desain"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
-            >
-              {designProjects.map((design) => (
-                <motion.div
-                  key={design.id}
-                  variants={itemVariants}
-                  className="border border-[#1f1f1f] bg-[#111111]/30 overflow-hidden group hover:border-[#333333] transition-colors duration-300"
-                >
-                  <div className="aspect-[4/3] w-full overflow-hidden bg-[#0d0d0d] relative">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={design.image}
-                      alt={design.title}
-                      className="w-full h-full object-cover opacity-85 group-hover:opacity-100 transition-opacity duration-500"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className="p-4 border-t border-[#1f1f1f]">
-                    <div className="flex justify-between items-center">
-                      <h3 className="text-xs font-normal text-[#f5f5f5]">
-                        {design.title}
+                      <h3 className="text-base text-[#d0d0d0] mb-2 group-hover:text-[#f0f0f0] transition-colors" style={{ fontWeight: 400 }}>
+                        {project.title}
                       </h3>
-                      <span className="text-[9px] font-mono text-[#555]">
-                        {design.tags[0]}
-                      </span>
+                      <p className="text-[12px] text-[#444] leading-relaxed">{project.description}</p>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </main>
+                    <div className="flex flex-wrap gap-1.5 mt-6">
+                      {project.tags.map((tag) => (
+                        <span key={tag} className="text-[9px] font-mono text-[#3a3a3a] border border-[#1a1a1a] px-2 py-0.5">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            ) : (
+              <motion.div key="desain" variants={stagger} initial="hidden" animate="visible" exit={{ opacity: 0 }}
+                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-px bg-[#1a1a1a]">
+                {designProjects.map((d) => (
+                  <motion.div key={d.id} variants={cardFade}
+                    className="bg-[#0a0a0a] group overflow-hidden">
+                    <div className="aspect-[4/3] overflow-hidden">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={d.image} alt={d.title}
+                        className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                        loading="lazy" />
+                    </div>
+                    <div className="px-5 py-4 border-t border-[#1a1a1a] flex justify-between items-center">
+                      <span className="text-xs text-[#888]" style={{ fontWeight: 400 }}>{d.title}</span>
+                      <span className="text-[9px] font-mono text-[#333]">{d.tags[0]}</span>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      </section>
 
-      {/* Footer */}
-      <footer className="mt-32 pt-8 border-t border-[#1f1f1f] flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] text-[#555555] font-mono">
-        <div>© 2026 raihan fajar aly. all rights reserved.</div>
-        <div className="flex gap-4">
-          <a
-            href="https://tiktok.com/@raihnnfa"
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-[#a3a3a3] transition-colors"
-          >
-            tiktok
-          </a>
-          <span>/</span>
-          <a
-            href="https://instagram.com/raihnnf.a"
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-[#a3a3a3] transition-colors"
-          >
-            instagram
-          </a>
-        </div>
+      {/* ── CONTACT ── */}
+      <section id="contact" className="py-32 px-6 md:px-12 max-w-6xl mx-auto border-t border-[#1a1a1a]">
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={stagger}
+          className="text-center space-y-8">
+          <motion.p variants={fadeUp} className="text-[11px] tracking-[0.25em] uppercase text-[#555]">
+            contact
+          </motion.p>
+          <motion.h2 variants={fadeUp} className="text-[clamp(2.5rem,7vw,6rem)] leading-none text-[#f0f0f0]" style={{ fontWeight: 300 }}>
+            let's work<br />together
+          </motion.h2>
+          <motion.p variants={fadeUp} className="text-[#555] text-sm max-w-md mx-auto">
+            open for freelance projects, collaborations, or just a conversation about design and development.
+          </motion.p>
+          <motion.div variants={fadeUp}>
+            <a href="mailto:rehanalay9@gmail.com"
+              className="inline-flex items-center gap-3 border border-[#2a2a2a] px-8 py-4 text-sm tracking-[0.15em] uppercase text-[#888] hover:text-[#f0f0f0] hover:border-[#555] transition-all duration-300">
+              rehanalay9@gmail.com
+              <ArrowUpRight />
+            </a>
+          </motion.div>
+          <motion.div variants={fadeUp} className="flex justify-center gap-8 pt-4">
+            {[
+              { label: "github", href: "https://github.com/ggaku3076-ux" },
+              { label: "instagram", href: "https://instagram.com/raihnnf.a" },
+              { label: "tiktok", href: "https://tiktok.com/@raihnnfa" },
+            ].map(({ label, href }) => (
+              <a key={label} href={href} target="_blank" rel="noreferrer"
+                className="text-[11px] tracking-widest uppercase text-[#444] hover:text-[#f0f0f0] transition-colors">
+                {label}
+              </a>
+            ))}
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* ── FOOTER ── */}
+      <footer className="border-t border-[#1a1a1a] px-6 md:px-12 max-w-6xl mx-auto py-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <span className="text-[10px] font-mono text-[#333] tracking-widest">
+          © 2026 raihan fajar aly
+        </span>
+        <span className="text-[10px] font-mono text-[#2a2a2a] tracking-widest">
+          web developer & ui/ux designer
+        </span>
       </footer>
     </div>
   );
