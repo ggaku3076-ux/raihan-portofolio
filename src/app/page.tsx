@@ -198,7 +198,7 @@ export default function Home() {
                 </div>
               ))}
               <div className="border-t border-[#1a1a1a] pt-6 grid grid-cols-3 gap-4 mt-4">
-                {[{ num: "8+", label: "projects" }, { num: "2+", label: "years learning" }, { num: "3", label: "disciplines" }].map(({ num, label }) => (
+                {[{ num: "8+", label: "projects" }, { num: "3", label: "disciplines" }].map(({ num, label }) => (
                   <div key={label}>
                     <p className="text-2xl text-[#f0f0f0]" style={{ fontWeight: 300 }}>{num}</p>
                     <p className="text-[10px] tracking-wider uppercase text-[#444] mt-1">{label}</p>
