@@ -165,4 +165,18 @@ export const designProjects: DesignProject[] = [
     image: "/assets/ig-grid.jpg",
     tags: ["Social Media Layout"],
   },
+  {
+    id: 8,
+    title: "Perfect Beauty",
+    category: "poster",
+    image: "/assets/poster/exam.png",
+    tags: ["Beauty Poster", "Branding"],
+  },
+  {
+    id: 9,
+    title: "Devine Hair Salon & Studio",
+    category: "poster",
+    image: "/assets/poster/smoothing-treatment.png",
+    tags: ["Luxury Salon", "Poster Art"],
+  },
 ];
